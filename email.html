@@ -35,8 +35,8 @@
         <div class="nav-content">
             <menu class="menu">
                 <ul class="container">
-                    <li><a href="#" class="active ico-envelop" role="menuitem">E-mails</a></li>
-                    <li><a href="#" role="menuitem" class="ico-plus">Novo e-mail</a></li>
+                    <li><a href="#" class="ico-envelop" role="menuitem">E-mails</a></li>
+                    <li><a href="#" role="menuitem" class="active ico-plus">Novo e-mail</a></li>
                     <li><a href="#" role="menuitem" class="ico-checkmark-circle">Configurações</a></li>
                     <li><a href="#" role="menuitem" class="visible-xs ico-exit">Logoff</a></li>
                 </ul>
@@ -47,56 +47,11 @@
         <main class="main">
             <div class="container">
                 <div class="row">
-                    <aside class="col-md-3 sidebar" role="complementary">
-                        <h3 class="ico-drawer-2">suas pastas</h3>
-                        <hr>
-                        
-                        <div class="well">
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
-                            <a href="" class="ico-folder-open btn btn-block btn-primary disabled">Pasta X</a>
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
-                        </div>
-                    </aside>
-                    <div class="col-md-9 content" role="main">
-                        <h2 class="ico-arrow-right">Pasta X</h2>
+                    <div class=" content" role="main">
+                        <h2 class="ico-envelop">(Compor|Responder|Encaminhar) E-mail</h2>
                         
                         <form action="/servidor/salvar" method="post" class="ls-form-text">
-                            <div class="well well-sm clearfix ls-table-group-actions">
-                                <p class="d-inline-block">
-                                    <strong class="counterChecks">0</strong>
-                                    <span class="counterChecksStr">itens selecionados</span>
-                                </p>
-                                <div class="actions pull-right">
-                                    <button type="button" class="btn btn-info">Mover</button>
-                                    <button type="button" class="btn btn-danger">Excluir</button>
-                                </div>
-                            </div>
-                            <table class="table ls-table">
-                                <thead>
-                                    <tr>
-                                        <th class="txt-center" style="width: 40px"><input type="checkbox"></th>
-                                        <th class="ls-nowrap" style="width: 200px;">Remetente</th>
-                                        <th class="txt-center hidden-xs" style="width: 100px;">Recebido</th>
-                                        <th class="" colspan="2">Assunto</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td> <input name="id" value="1" type="checkbox"> </td>
-                                        <td>José Carlos</td>
-                                        <td class="txt-center">11/05/2014</td>
-                                        <td>Projeto do Webmail</td>
-                                        <td style="width: 100px; padding-right: 0; padding-left: 0;" class="txt-center">
-                                            <a style="display: inline" title="visualizar" href="#" onclick="return lerEmail(1);" class="ico-checkmark text-primary"></a>
-                                            <a style="display: inline" title="responder" href="#" onclick="return responderEmail(1);" class="ico-reply"></a>
-                                            <a style="display: inline" title="encaminhar" href="#" onclick="return encaminharEmail(1);" class="ico-forward-2"></a>
-                                            <a style="display: inline" title="excluir" href="email.jsp?acao=excluir&id=2" data-confirm-text="Confirma a exclusão deste e-mail?" class="text-danger ico-remove"><span style="display: none">Excluir</span></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <textarea name="olar" id="oi"><p>oi</p></textarea>
                         </form>
                         
                         
@@ -147,5 +102,10 @@
         <script type="text/javascript" src="summernote/summernote.min.js"></script>
         <script type="text/javascript" src="summernote/pt-BR.js"></script>
         <script type="text/javascript" src="javascripts/email.js"></script>
+        <script type="text/javascript">
+        $(function() {
+            $('#oi').summernote({ lang: 'pt-BR' });
+        });
+        </script>
     </body>
 </html>
