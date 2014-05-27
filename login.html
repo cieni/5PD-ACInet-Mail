@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>VagalMAIL</title>
+        <meta charset="utf-8">
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/locastyle.css">
+        <link rel="stylesheet" type="text/css" href="stylesheets/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="summernote/summernote.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="center-block box-parent-login" style="position: absolute; width: 50%;" id="boxLogin">
+                    <div class="well bg-white box-login">
+                        <h1 class="ls-login-logo">VagalMAIL <small>Login</small></h1><br>
+                        
+                        <form role="form">
+                            <fieldset>
+
+                                <div class="form-group ls-login-user">
+                                    <label for="userLogin" class="sr-only">Usuário</label>
+                                    <input class="form-control ls-login-bg-user input-lg" id="userLogin" type="text" aria-label="Usuário" placeholder="Usuário">
+                                </div>
+
+                                <div class="form-group ls-login-password">
+                                    <label for="userPassword" class="sr-only">Senha</label>
+                                    <input class="form-control ls-login-bg-password input-lg" id="userPassword" type="password" aria-label="Senha" placeholder="Senha">
+                                </div>
+
+                                <p class="txt-center">
+                                    <a href="#" class="ls-login-forgot">Esqueci minha senha</a> | 
+                                    <a href="#" class="ls-login-signup">Cadastrar</a>
+                                </p>
+                                </p>
+
+                                <input type="submit" value="Entrar" class="btn btn-primary btn-lg btn-block">
+                                
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="javascripts/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="javascripts/locastyle.js"></script>
+        <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+        <script type="text/javascript" src="summernote/summernote.min.js"></script>
+        <script type="text/javascript" src="summernote/pt-BR.js"></script>
+        <script type="text/javascript" src="javascripts/email.js"></script>
+        <script type="text/javascript">
+        $(function() {
+            var box = $('div#boxLogin');
+            
+            $(window).on('resize', function(e) {
+                box.css({
+                    position: 'absolute',
+                    left: $(window).width() / 2 - box.outerWidth() / 2,
+                    top: $(window).height() / 2 - box.outerHeight() / 2
+                });
+            });
+            
+            $(window).resize();
+        });
+        </script>
+    </body>
+</html>
