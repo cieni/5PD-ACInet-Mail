@@ -5,5 +5,5 @@ Repositório de código para o projeto final de Aplicações Corporativas na Int
 
 Alunos
 ------
-*Gabriel Sato
-*José Carlos
+* Gabriel Sato
+* José Carlos
