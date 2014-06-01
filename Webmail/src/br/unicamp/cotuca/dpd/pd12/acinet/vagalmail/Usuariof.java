@@ -36,6 +36,6 @@ public class Usuariof {
     }
     
     public Contar[] getContas() {
-        return contas;
+        return null;//contas;
     }
 }

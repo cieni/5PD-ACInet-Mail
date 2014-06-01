@@ -6,18 +6,27 @@ import javax.persistence.Persistence;
 
 public class BD {
     
-    private static EntityManagerFactory instance;
+    private static EntityManagerFactory emf;
+    private static EntityManager em;
     
     public static EntityManagerFactory getEntityManagerFactory() {
-        if (instance == null) {
-            instance = Persistence.createEntityManagerFactory("WebmailPU");
+        if (emf == null) {
+            emf = Persistence.createEntityManagerFactory("WebmailPU");
         }
             
-        return instance;
+        return emf;
     }
 
     public static EntityManager createEntityManager() {
         return getEntityManagerFactory().createEntityManager();
+    }
+    
+    public static EntityManager getEntityManager() {
+        if (em == null) {
+            em = createEntityManager();
+        }
+        
+        return em;
     }
     
 }

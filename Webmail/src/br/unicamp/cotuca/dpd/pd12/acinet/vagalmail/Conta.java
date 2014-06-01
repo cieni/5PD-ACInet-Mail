@@ -10,19 +10,22 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author u12177
+ * @author José Carlos
  */
 @Entity
 @Table(name = "conta")
@@ -31,14 +34,21 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Conta.findAll", query = "SELECT c FROM Conta c"),
     @NamedQuery(name = "Conta.findById", query = "SELECT c FROM Conta c WHERE c.id = :id"),
     @NamedQuery(name = "Conta.findByEmail", query = "SELECT c FROM Conta c WHERE c.email = :email"),
-    @NamedQuery(name = "Conta.findBySvHost", query = "SELECT c FROM Conta c WHERE c.svHost = :svHost"),
-    @NamedQuery(name = "Conta.findBySvPort", query = "SELECT c FROM Conta c WHERE c.svPort = :svPort"),
-    @NamedQuery(name = "Conta.findBySvUser", query = "SELECT c FROM Conta c WHERE c.svUser = :svUser"),
-    @NamedQuery(name = "Conta.findBySvPassword", query = "SELECT c FROM Conta c WHERE c.svPassword = :svPassword"),
-    @NamedQuery(name = "Conta.findBySvType", query = "SELECT c FROM Conta c WHERE c.svType = :svType")})
+    @NamedQuery(name = "Conta.findByImapHost", query = "SELECT c FROM Conta c WHERE c.imapHost = :imapHost"),
+    @NamedQuery(name = "Conta.findByImapPort", query = "SELECT c FROM Conta c WHERE c.imapPort = :imapPort"),
+    @NamedQuery(name = "Conta.findByImapUser", query = "SELECT c FROM Conta c WHERE c.imapUser = :imapUser"),
+    @NamedQuery(name = "Conta.findByImapPassword", query = "SELECT c FROM Conta c WHERE c.imapPassword = :imapPassword"),
+    @NamedQuery(name = "Conta.findBySmtpHost", query = "SELECT c FROM Conta c WHERE c.smtpHost = :smtpHost"),
+    @NamedQuery(name = "Conta.findBySmtpPort", query = "SELECT c FROM Conta c WHERE c.smtpPort = :smtpPort"),
+    @NamedQuery(name = "Conta.findBySmtpUser", query = "SELECT c FROM Conta c WHERE c.smtpUser = :smtpUser"),
+    @NamedQuery(name = "Conta.findBySmtpPassword", query = "SELECT c FROM Conta c WHERE c.smtpPassword = :smtpPassword")})
 public class Conta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(generator="sqlite_Conta")
+    @TableGenerator(name="sqlite_Conta", table="sqlite_sequence",
+            pkColumnName="name", valueColumnName="seq",
+            pkColumnValue="conta", allocationSize = 1)
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
@@ -52,27 +62,41 @@ public class Conta implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2000000000)
-    @Column(name = "sv_host")
-    private String svHost;
+    @Column(name = "imap_host")
+    private String imapHost;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "sv_port")
-    private int svPort;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2000000000)
-    @Column(name = "sv_user")
-    private String svUser;
+    @Column(name = "imap_port")
+    private int imapPort;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2000000000)
-    @Column(name = "sv_password")
-    private String svPassword;
+    @Column(name = "imap_user")
+    private String imapUser;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 2000000000)
-    @Column(name = "sv_type")
-    private String svType;
+    @Column(name = "imap_password")
+    private String imapPassword;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2000000000)
+    @Column(name = "smtp_host")
+    private String smtpHost;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "smtp_port")
+    private int smtpPort;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2000000000)
+    @Column(name = "smtp_user")
+    private String smtpUser;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2000000000)
+    @Column(name = "smtp_password")
+    private String smtpPassword;
     @JoinColumn(name = "id_login", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Login idLogin;
@@ -84,14 +108,17 @@ public class Conta implements Serializable {
         this.id = id;
     }
 
-    public Conta(Integer id, String email, String svHost, int svPort, String svUser, String svPassword, String svType) {
+    public Conta(Integer id, String email, String imapHost, int imapPort, String imapUser, String imapPassword, String smtpHost, int smtpPort, String smtpUser, String smtpPassword) {
         this.id = id;
         this.email = email;
-        this.svHost = svHost;
-        this.svPort = svPort;
-        this.svUser = svUser;
-        this.svPassword = svPassword;
-        this.svType = svType;
+        this.imapHost = imapHost;
+        this.imapPort = imapPort;
+        this.imapUser = imapUser;
+        this.imapPassword = imapPassword;
+        this.smtpHost = smtpHost;
+        this.smtpPort = smtpPort;
+        this.smtpUser = smtpUser;
+        this.smtpPassword = smtpPassword;
     }
 
     public Integer getId() {
@@ -110,44 +137,68 @@ public class Conta implements Serializable {
         this.email = email;
     }
 
-    public String getSvHost() {
-        return svHost;
+    public String getImapHost() {
+        return imapHost;
     }
 
-    public void setSvHost(String svHost) {
-        this.svHost = svHost;
+    public void setImapHost(String imapHost) {
+        this.imapHost = imapHost;
     }
 
-    public int getSvPort() {
-        return svPort;
+    public int getImapPort() {
+        return imapPort;
     }
 
-    public void setSvPort(int svPort) {
-        this.svPort = svPort;
+    public void setImapPort(int imapPort) {
+        this.imapPort = imapPort;
     }
 
-    public String getSvUser() {
-        return svUser;
+    public String getImapUser() {
+        return imapUser;
     }
 
-    public void setSvUser(String svUser) {
-        this.svUser = svUser;
+    public void setImapUser(String imapUser) {
+        this.imapUser = imapUser;
     }
 
-    public String getSvPassword() {
-        return svPassword;
+    public String getImapPassword() {
+        return imapPassword;
     }
 
-    public void setSvPassword(String svPassword) {
-        this.svPassword = svPassword;
+    public void setImapPassword(String imapPassword) {
+        this.imapPassword = imapPassword;
     }
 
-    public String getSvType() {
-        return svType;
+    public String getSmtpHost() {
+        return smtpHost;
     }
 
-    public void setSvType(String svType) {
-        this.svType = svType;
+    public void setSmtpHost(String smtpHost) {
+        this.smtpHost = smtpHost;
+    }
+
+    public int getSmtpPort() {
+        return smtpPort;
+    }
+
+    public void setSmtpPort(int smtpPort) {
+        this.smtpPort = smtpPort;
+    }
+
+    public String getSmtpUser() {
+        return smtpUser;
+    }
+
+    public void setSmtpUser(String smtpUser) {
+        this.smtpUser = smtpUser;
+    }
+
+    public String getSmtpPassword() {
+        return smtpPassword;
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        this.smtpPassword = smtpPassword;
     }
 
     public Login getIdLogin() {
