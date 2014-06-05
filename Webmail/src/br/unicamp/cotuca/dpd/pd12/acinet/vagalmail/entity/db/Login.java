@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail;
+package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db;
 
 import java.io.Serializable;
 import java.util.List;

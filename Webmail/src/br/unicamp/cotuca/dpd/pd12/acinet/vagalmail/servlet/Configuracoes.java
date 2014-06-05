@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 
-package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail;
+package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet;
 
+import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.BD;
+import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Conta;
+import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +31,7 @@ public class Configuracoes extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
         
         String metodo = "", req = request.getRequestURI();
         
@@ -48,6 +52,9 @@ public class Configuracoes extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        
         String metodo = request.getParameter("acao");
         if (metodo == null) {
             return;

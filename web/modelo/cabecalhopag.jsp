@@ -1,11 +1,11 @@
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Login"%>
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Logar"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Conta"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet.Logar"%>
 <%@page import="javax.persistence.PersistenceException"%>
 <%@page import="java.util.List"%>
 <%@page import="javax.persistence.Query"%>
 <%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.BD"%>
 <%@page import="javax.persistence.EntityManager"%>
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Conta"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login"%>
 <%@include file="cabecalho.jsp" %>
         <header class="header" role="banner">
             <div class="container">

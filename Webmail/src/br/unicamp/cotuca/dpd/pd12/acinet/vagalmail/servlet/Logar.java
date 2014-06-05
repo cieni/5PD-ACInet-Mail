@@ -1,5 +1,8 @@
-package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail;
+package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet;
 
+import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.BD;
+import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Conta;
+import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login;
 import java.io.IOException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -20,6 +23,9 @@ public class Logar extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        
         String login, senha, nome, senha2;
         
         String contexto = request.getRequestURI();
@@ -79,6 +85,9 @@ public class Logar extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        
         if (request.getParameter("olar") != null) { // teste de login
             String teste = request.getParameter("olar");
             

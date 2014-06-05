@@ -1,11 +1,33 @@
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Logar"%>
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Login"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet.Logar"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="modelo/cabecalhopag.jsp?atual=emails" /> <%-- inclusao dinamica --%>
 
         <main class="main">
             <div class="container">
                 <div class="row">
+                    <% 
+                        String msg = request.getParameter("mensagem");
+                        if (msg != null) {
+                            if (msg.equals("emailSucesso")) { %>
+                    <div class="content" role="main">
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-hidden="true">×</a>
+                            <p>O e-mail foi enviado com sucesso.</p>
+                        </div>
+                    </div>
+                                
+                            <% } else if (msg.equals("emailFalha")) { %>
+                    <div class="content" role="main">
+                        <div class="alert alert-warning alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-hidden="true">×</a>
+                            <p>Houve uma falha ao enviar o e-mail. Tente novamente.</p>
+                        </div>
+                    </div>
+                                
+                            <% }
+                        } %>
+                    
                     <aside class="col-md-3 sidebar" role="complementary" style="z-index: 0">
                         <h3 class="ico-drawer-2">suas pastas</h3>
                         <hr>

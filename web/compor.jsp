@@ -1,27 +1,42 @@
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Logar"%>
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Login"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.Email"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet.Logar"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="modelo/cabecalhopag.jsp?atual=novo" /> <%-- inclusao dinamica --%>
-        
+<%
+    Email email = null;
+    String verbo = "";
+    
+    if (request.getAttribute("reply") != null) {
+        email = (Email) request.getAttribute("reply");
+        verbo = "Responder";
+    } else if (request.getAttribute("forward") != null) {
+        email = (Email) request.getAttribute("forward");
+        verbo = "Encaminhar";
+    } else {
+        email = new Email();
+        verbo = "Compor";
+    }
+%>
         <main class="main">
             <div class="container">
                 <div class="row">
                     <div class=" content" role="main">
-                        <h2 class="ico-envelop">(Compor|Responder|Encaminhar) E-mail</h2>
+                        <h2 class="ico-envelop"><%=verbo%> E-mail</h2>
                         
                         <div class="container">
                             <div class="row">
-                                <form role="form" action="/servidor/salvar" method="post">
+                                <form role="form" action="/email" method="post" enctype="multipart/form-data">
                                     <fieldset class="col-lg-4">
 
                                         <div class="form-group">
                                             <label for="emailFor">Para</label>
-                                            <textarea class="form-control" id="emailFor" name="para" rows="2"></textarea>
+                                            <textarea class="form-control" id="emailFor" name="para" rows="2"><%=email.getPara()%></textarea>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="emailCC">Cópia</label>
-                                            <textarea class="form-control" id="emailCC" name="cc" rows="2"></textarea>
+                                            <textarea class="form-control" id="emailCC" name="cc" rows="2"><%=email.getCopia()%></textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -43,10 +58,10 @@
                                         
                                         <div class="form-group">
                                             <label for="emailSubject">Assunto</label>
-                                            <input class="form-control" type="text" name="assunto" value="" id="emailSubject" />
+                                            <input autocomplete="off" class="form-control" type="text" name="assunto" value="<%=email.getAssunto()%>" id="emailSubject" />
                                         </div>
                                         
-                                        <textarea name="texto" id="emailBody"></textarea><br>
+                                        <textarea name="corpo" id="emailBody"><%=email.getCorpo()%></textarea><br>
                                         
                                     </fieldset>
                                     
@@ -64,42 +79,6 @@
                 </div>
             </div>
         </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container footer-info">
-                <p>
-                    <span class="ico-user" style="float: none;">Gabriel Massuyoshi Sato <strong>12170</strong></span>
-                    <span class="ico-user" style="float: none;">JosÃ© Carlos Cieni JÃºnior <strong>12177</strong></span><br>
-                    Projeto desenvolvido para a disciplina de AplicaÃ§Ãµes Corporativas na Internet - 5Âº Semestre / InformÃ¡tica Diurno.
-                </p>
-            </div>
-        </footer>
-        
-        <!-- Modal -->
-        <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã</button>
-                        <h4 class="modal-title" id="emailTitle">TÃ­tulo do E-mail</h4>
-                        <hr>
-                        <p>
-                            <strong>Recebido: </strong><span id="emailTime">22/05/2011 Ã s 11:45:31</span><br>
-                            <strong>De: </strong><span id="emailFrom">JoÃ£ozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span></p>
-                    </div>
-                    <div class="modal-body">
-                        <iframe id="emailBody" style="width: 100%; height: 250px; margin: 0; border: none;" seamless="seamless" src="readme.md"></iframe>
-                    </div>
-                    <div class="modal-footer" style="margin-top: 0;">
-                        
-                        <button id="emailReply" type="button" class="btn btn-primary ico-reply">Responder</button>
-                        <button id="emailForward" type="button" class="btn btn-info ico-forward-2">Encaminhar</button>
-                        <button id="emailModalClose" type="button" class="btn btn-default ico-close" data-dismiss="modal">Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <%@include file="modelo/rodapesc.jsp" %>
         <%@include file="modelo/scripts.jsp" %>

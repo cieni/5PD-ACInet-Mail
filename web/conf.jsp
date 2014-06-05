@@ -1,6 +1,6 @@
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Conta"%>
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Logar"%>
-<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.Login"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Conta"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet.Logar"%>
+<%@page import="br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="modelo/cabecalhopag.jsp?atual=conf" /> <%-- inclusao dinamica --%>
         <main class="main">
