@@ -10,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="/stylesheets/locastyle.css">
         <link rel="stylesheet" type="text/css" href="/stylesheets/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="/summernote/summernote.css">
+        <link rel="stylesheet" type="text/css" href="/treeview/bootstrap-treeview.min.css">
     </head>
     
     <body>
