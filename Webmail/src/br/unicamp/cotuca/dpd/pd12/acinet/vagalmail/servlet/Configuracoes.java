@@ -83,11 +83,15 @@ public class Configuracoes extends HttpServlet {
                 Conta conta = (Conta) request.getSession().getAttribute("conta");
                 Store store = Logar.getImapStore(conta);
 
-                URLName urln = new URLName(url);
-                Folder pasta = store.getFolder(urln);
+                Folder pasta = null;
+                
+                if (!acao.equals("nova")) {
+                    URLName urln = new URLName(url);
+                    pasta = store.getFolder(urln);
 
-                if (pasta.isOpen())
-                    pasta.close(false);
+                    if (pasta.isOpen())
+                        pasta.close(false);
+                }
 
                 switch (acao) {
                     case "renomear":

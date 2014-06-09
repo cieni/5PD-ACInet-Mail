@@ -114,7 +114,7 @@
                                     url: node.urlname 
                                 }
                             });
-                            url = node.urlname;
+                            
                             xhr.done(function(data) {
                                 folderMessages.html(data);
                                 locastyle.tables.init(folderMessages);
@@ -144,11 +144,13 @@
                     });
                     context.attach("#folder-treeview ul li", [
                         { text: 'Renomear', action: function(e) {
-                                var pastaClick = $('body').data('context');
+                                var pastaClick = window.pudim;
                                 
                                 if (!pastaClick.is("li")) {
                                     pastaClick = pastaClick.parent("li");
                                 }
+                                url = pastaClick.data('urlname');
+                               
                                 var nomeAtu = pastaClick.clone();
                                 nomeAtu.children("span").remove();
                                 nomeAtu = nomeAtu.text();
@@ -167,6 +169,13 @@
                         }},
                         { divider: true },
                         { text: 'Esvaziar', class: 'text-warning', action: function(e) {
+                                var pastaClick = window.pudim;
+                                
+                                if (!pastaClick.is("li")) {
+                                    pastaClick = pastaClick.parent("li");
+                                }
+                                url = pastaClick.data('urlname');
+                                
                                 if (confirm('Confirma excluir todas as mensagens desta pasta?')) {
                                     $.post("/conf/pasta", { url: url, acao: "esvaziar" }, function(d) {
                                         if (d.erro)
@@ -179,6 +188,13 @@
                                 }
                         }},
                         { text: 'Excluir', class: 'text-danger', action: function(e) {
+                                var pastaClick = window.pudim;
+                                
+                                if (!pastaClick.is("li")) {
+                                    pastaClick = pastaClick.parent("li");
+                                }
+                                url = pastaClick.data('urlname');
+                                
                                 if (confirm('Confirma excluir esta pasta e todas as mensagens nela contidas?')) {
                                     $.post("/conf/pasta", { url: url, acao: "excluir" }, function(d) {
                                         if (d.erro)

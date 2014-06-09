@@ -108,7 +108,7 @@ var context = context || (function() {
             $('.dropdown-context:not(.dropdown-context-sub)').hide();
             
             $dd = $('#dropdown-' + id);
-            $('body').data('context', $(e.target));
+            window.pudim = $(e.target);
             
             if (typeof options.above == 'boolean' && options.above) {
                 $dd.addClass('dropdown-context-up').css({
