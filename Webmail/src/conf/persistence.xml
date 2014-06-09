@@ -9,8 +9,8 @@
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:c:\temp\vagalmail.sqlite"/>
-      <property name="eclipselink.logging.level.sql" value="FINE"/>
-      <property name="eclipselink.logging.parameters" value="true"/>
+      <!--<property name="eclipselink.logging.level.sql" value="FINE"/>
+      <property name="eclipselink.logging.parameters" value="true"/>-->
     </properties>
   </persistence-unit>
 </persistence>

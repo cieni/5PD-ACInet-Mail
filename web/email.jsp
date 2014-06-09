@@ -1,3 +1,7 @@
+<%@page import="java.util.Arrays"%>
+<%@page import="java.util.Collections"%>
+<%@page import="org.json.simple.JSONArray"%>
+<%@page import="javax.mail.Multipart"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="net.htmlparser.jericho.Element"%>
 <%@page import="net.htmlparser.jericho.Source"%>
@@ -59,7 +63,13 @@
         Message m = pasta.getMessage(id);
 
         String corpo = Email.getText(m);
+        String[] anexos = null;
+        
+        if (m.getContent() instanceof Multipart)
+            anexos = Email.getAttachmentNames((Multipart) m.getContent());
+        
         if (corpo == null) corpo = "<html><body></body></html>";
+        
         
         JSONObject obj = new JSONObject();
         obj.put("titulo", m.getSubject());
@@ -68,6 +78,12 @@
         obj.put("para", recipientsLink(m.getRecipients(Message.RecipientType.TO)));
         obj.put("cc", recipientsLink(m.getRecipients(Message.RecipientType.CC)));
         obj.put("mensagem", corpo);
+        
+        if (anexos != null) {
+            JSONArray arr = new JSONArray();
+            arr.addAll(Arrays.asList(anexos));
+            obj.put("anexos", arr);
+        }
         
         obj.writeJSONString(out);
         

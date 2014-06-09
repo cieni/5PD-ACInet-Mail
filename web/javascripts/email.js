@@ -6,6 +6,7 @@
         remetente = $("span#emailFrom"),
         destinatario = $("span#emailTo"),
         copia = $("span#emailCC"),
+        anexo = $("span#emailAtt"),
         mensagem = $("iframe#emailBody"),
         responder = $("button#emailReply"),
         encaminhar = $("button#emailForward");
@@ -35,6 +36,34 @@
                 mensagem.attr('srcdoc', dados.mensagem);
                 idCorrente = id;
                 urlCorrente = url;
+                
+                if (dados.anexos && dados.anexos.length > 0) {
+                    anexo.empty();
+                    
+                    var lbl = $("<strong/>").text('Anexos:');
+                    var espaco = $("<span/>").html('&nbsp;');
+                    
+                    var sel = $("<select id=emailQualAnexo />").addClass('form-control input-sm').css('display', 'inline-block').width(200);
+                    
+                    for (var i = 0; i < dados.anexos.length; ++i) {
+                        sel.append($("<option/>").text(dados.anexos[i]).val(dados.anexos[i]));
+                    }
+                    
+                    var btn = $("<button type=button />").addClass('btn btn-primary ico-download btn-sm').text('download');
+                    btn.on('click', function(e) {
+                        
+                        location.href = '/email?acao=download&url=' + encodeURIComponent(urlCorrente) + '&id=' + idCorrente + '&anexo=' + encodeURIComponent(sel.val());
+//                        $("<a>").attr('href', '/email?acao=download&url=' + encodeURIComponent(urlCorrente) + '&id=' + idCorrente + '&anexo=' + encodeURIComponent(sel.val())).click();
+//                        $("<iframe>")
+//                                .hide()
+//                                .attr('src', '/email?acao=download&url=' + encodeURIComponent(urlCorrente) + '&id=' + idCorrente + '&anexo=' + encodeURIComponent(sel.val()))
+//                                .ready(function(e) { $(this).remove(); })
+//                                .appendTo(document)
+                        
+                    });
+                    
+                    anexo.append(lbl, espaco.clone(), sel, espaco.clone(), btn);
+                }
                 
                 modal.modal('show');
             } else {

@@ -3,15 +3,9 @@ package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet;
 import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.BD;
 import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Conta;
 import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -167,6 +161,9 @@ public class Logar extends HttpServlet {
     public static Store getImapStore(Conta conta) throws MessagingException {
         Properties prop = new Properties();
         prop.setProperty("mail.store.protocol", "imaps");
+        System.setProperty("mail.mime.decodefilename", "true");
+        System.setProperty("mail.mime.decodeparameters", "true");
+        System.setProperty("mail.mime.decodetext.strict", "false");
         
         /*FileOutputStream os = null;
         try {

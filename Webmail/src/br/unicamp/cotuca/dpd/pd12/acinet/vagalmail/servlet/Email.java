@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,11 +63,13 @@ public class Email extends HttpServlet {
                 Message m = pasta.getMessage(id);
                 
                 String corpo = getText(m);
+                
                 if (corpo == null) corpo = "<html><body></body></html>";
                 Source src = new Source(corpo);
                 
                 Element elm = src.getFirstElement(HTMLElementName.BODY);
-                corpo = elm.toString().replace("div>", "div>");
+                if (elm != null)
+                    corpo = elm.toString().replace("body>", "div>");
                 corpo = "<blockquote><strong>Mensagem original:</strong>"
                         + "<br /><b>De:</b> " + plainRecipients(m.getFrom())
                         + "<br /><b>Para:</b> " + plainRecipients(m.getRecipients(Message.RecipientType.TO))
@@ -102,11 +106,82 @@ public class Email extends HttpServlet {
             }
         } catch (MessagingException ex) {
             //throw new RuntimeException(ex);
-            request.getRequestDispatcher("/conf.jsp?acao=conta&erro=imap").forward(request, response);
+            request.getRequestDispatcher("/conf.jsp?metodo=conta&erro=imap").forward(request, response);
+            return;
+        }
+        
+        String acao = request.getParameter("acao");
+        if (acao != null && acao.equals("download")) {
+            try {
+                String anexo = request.getParameter("anexo");
+                int id = Integer.parseInt(request.getParameter("id"));
+
+                URLName urln = new URLName(url);
+
+                Conta c = (Conta) request.getSession().getAttribute("conta");
+                Folder pasta = Logar.getImapStore(c).getFolder(urln);
+                pasta.open(Folder.READ_WRITE);
+
+                Message m = pasta.getMessage(id);
+
+                if (m.getContent() instanceof Multipart)
+                    getAttachment((Multipart) m.getContent(), anexo, response);
+                else
+                    response.getWriter().print("Anexo inexistente");
+
+                return;
+            } catch (MessagingException ex) {
+                response.getWriter().print("Erro de e-mail");
+            } catch (IOException ex) {
+                response.getWriter().print("Erro de I/O");
+            }
+            
             return;
         }
         
         request.getRequestDispatcher("/compor.jsp").forward(request, response);
+    }
+    
+    public static String[] getAttachmentNames(Multipart content) throws MessagingException, IOException {
+        ArrayList<String> ret = new ArrayList<>();
+        
+        for (int i = 0; i < content.getCount(); i++) {
+            String nomeDoArquivo = content.getBodyPart(i).getFileName();
+            if (nomeDoArquivo != null) {
+                ret.add(nomeDoArquivo);
+            }
+        }
+        
+        return ret.toArray(new String[0]);
+    }
+    
+    public static void getAttachment(Multipart content, String name, HttpServletResponse response) throws MessagingException, IOException {
+        byte[] buf = new byte[4096];
+        
+        for (int i = 0; i < content.getCount(); i++) {
+            BodyPart bp = content.getBodyPart(i);
+            
+            String nomeDoArquivo = bp.getFileName();
+            if (nomeDoArquivo != null && nomeDoArquivo.equals(name)) {
+                InputStream is = bp.getInputStream();
+                
+                response.reset();
+                
+                response.setContentType(bp.getContentType());
+                response.setHeader("Content-Disposition", "attachment; filename=" + name);
+                
+                OutputStream os = response.getOutputStream();
+                
+                int bytesRead;
+                while ((bytesRead = is.read(buf)) != -1) {
+                    os.write(buf, 0, bytesRead);
+                }
+                
+                os.close();
+                
+                return;
+            }
+        }
     }
     
     public static String getText(javax.mail.Part p) throws MessagingException, IOException {
@@ -321,7 +396,7 @@ public class Email extends HttpServlet {
             email.send();
             response.sendRedirect("/?mensagem=emailSucesso");
         } catch (EmailException ex) {
-            request.getRequestDispatcher("/conf.jsp?acao=conta&erro=smtp").forward(request, response);
+            request.getRequestDispatcher("/conf.jsp?metodo=conta&erro=smtp").forward(request, response);
             //response.sendRedirect("/conf/conta?erro=envio");
             //throw new RuntimeException(ex);
         }

@@ -61,7 +61,8 @@
                             <strong>Recebido: </strong><span id="emailTime">22/05/2011 às 11:45:31</span><br>
                             <strong>De: </strong><span id="emailFrom">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span><br>
                             <strong>Para: </strong><span id="emailTo">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span><br>
-                            <strong>Cópia: </strong><span id="emailCC">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span></p>
+                            <strong>Cópia: </strong><span id="emailCC">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span><br>
+                            <span id="emailAtt"></span></p>
                     </div>
                     <div class="modal-body">
                         <iframe id="emailBody" style="width: 100%; height: 250px; margin: 0; border: none;" seamless="seamless" src=""></iframe>
