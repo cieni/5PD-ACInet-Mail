@@ -10,8 +10,24 @@
                         
                         <% 
                             String acao = request.getParameter("metodo");
+                            String erro = request.getParameter("erro");
                             String mensagem = (String) request.getAttribute("mensagem");
                             
+                            if (erro != null) {
+                                if (erro.equals("smtp")) {%>
+                        <div class="alert alert-danger alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-hidden="true">×</a>
+                            <p>Houve uma falha no envio do e-mail. Verifique suas configurações de saída (SMTP).</p>
+                        </div> 
+                            <% 
+                                } else if (erro.equals("imap")) { %>
+                        <div class="alert alert-danger alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-hidden="true">×</a>
+                            <p>Houve uma falha ao receber os e-mails. Verifique suas configurações de entrada (IMAP).</p>
+                        </div> 
+                            <% 
+                                }
+                            }
                             if (mensagem != null) {
                                 if (mensagem.equals("erro")) { %>
                         <div class="alert alert-warning alert-dismissable">

@@ -58,7 +58,7 @@
                                         
                                         <div class="form-group">
                                             <label for="emailSubject">Assunto</label>
-                                            <input autocomplete="off" class="form-control" type="text" name="assunto" value="<%=email.getAssunto()%>" id="emailSubject" />
+                                            <input autocomplete="off" class="form-control" type="text" name="assunto" value="<%=email.getAssunto().replace("\"", "&quot;")%>" id="emailSubject" />
                                         </div>
                                         
                                         <textarea name="corpo" id="emailBody"><%=email.getCorpo()%></textarea><br>

@@ -3,8 +3,18 @@ package br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.servlet;
 import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.BD;
 import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Conta;
 import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Store;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -154,6 +164,32 @@ public class Logar extends HttpServlet {
         }
     }
 
+    public static Store getImapStore(Conta conta) throws MessagingException {
+        Properties prop = new Properties();
+        prop.setProperty("mail.store.protocol", "imaps");
+        
+        /*FileOutputStream os = null;
+        try {
+            os = new FileOutputStream("C:\\temp\\logIMAP.txt");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Logar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        PrintStream ps = new PrintStream(os);*/
+        
+        Session session = Session.getInstance(prop);
+        
+        /*session.setDebug(true);
+        session.setDebugOut(ps);*/
+        
+        
+        
+        Store store = session.getStore();
+        
+        store.connect(conta.getImapHost(), conta.getImapPort(), conta.getImapUser(), conta.getImapPassword());
+        
+        return store;
+    }
+    
     public static class NaoAutenticadoException extends Exception {
 
         public NaoAutenticadoException() {

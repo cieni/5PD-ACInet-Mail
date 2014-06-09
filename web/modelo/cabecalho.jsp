@@ -11,6 +11,7 @@
         <link rel="stylesheet" type="text/css" href="/stylesheets/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="/summernote/summernote.css">
         <link rel="stylesheet" type="text/css" href="/treeview/bootstrap-treeview.min.css">
+        <link rel="stylesheet" type="text/css" href="/context/context.bootstrap.css">
     </head>
     
     <body>

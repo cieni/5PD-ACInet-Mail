@@ -12,6 +12,11 @@ import br.unicamp.cotuca.dpd.pd12.acinet.vagalmail.entity.db.Login;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Flags;
+import javax.mail.Folder;
+import javax.mail.MessagingException;
+import javax.mail.Store;
+import javax.mail.URLName;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.servlet.ServletException;
@@ -19,12 +24,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.simple.JSONObject;
 
 /**
  *
  * @author José Carlos
  */
-@WebServlet({"/conf/nova", "/conf/conta", "/conf/senha", "/conf/salvar"})
+@WebServlet({"/conf/nova", "/conf/conta", "/conf/pasta", "/conf/senha", "/conf/salvar"})
 public class Configuracoes extends HttpServlet {
     
     @Override
@@ -54,6 +60,77 @@ public class Configuracoes extends HttpServlet {
             throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
+        
+        if (request.getRequestURI().contains("/pasta")) {
+            String acao = request.getParameter("acao"),
+                    url = request.getParameter("url"),
+                    novo = request.getParameter("novo");
+            
+            JSONObject obj = new  JSONObject();
+            if (acao == null || url == null) {
+                obj.put("erro", "Solicitação inválida");
+                obj.writeJSONString(response.getWriter()); 
+                return;
+            }
+            
+            if ((acao.equals("renomear") || acao.equals("nova")) && novo == null) {
+                obj.put("erro", "Solicitação inválida");
+                obj.writeJSONString(response.getWriter()); 
+                return;
+            }
+            
+            try {
+                Conta conta = (Conta) request.getSession().getAttribute("conta");
+                Store store = Logar.getImapStore(conta);
+
+                URLName urln = new URLName(url);
+                Folder pasta = store.getFolder(urln);
+
+                if (pasta.isOpen())
+                    pasta.close(false);
+
+                switch (acao) {
+                    case "renomear":
+                        if (pasta.renameTo(store.getFolder(novo))) {
+                            obj.put("sucesso", "Renomeado com sucesso");
+                        } else {
+                            obj.put("erro", "Erro ao renomear a pasta");
+                        }
+                        break;
+                    case "esvaziar":
+                        pasta.open(Folder.READ_WRITE);
+                        pasta.setFlags(1, pasta.getMessageCount(), new Flags(Flags.Flag.DELETED), true);
+                        pasta.expunge();
+                        obj.put("sucesso", "Esvaziado com sucesso");
+                        break;
+                    case "excluir":
+                        if (pasta.delete(true)) {
+                            obj.put("sucesso", "Excluído com sucesso");
+                        } else {
+                            obj.put("erro", "Erro ao excluir a pasta");
+                        }
+                        break;
+                    case "nova":
+                        pasta = store.getFolder(novo);
+                        if (!pasta.exists()) {
+                            if (pasta.create(Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES)) {
+                                obj.put("sucesso", "Criado com sucesso");
+                            } else {
+                                obj.put("erro", "Erro ao criar a pasta");
+                            }
+                        } else {
+                            obj.put("erro", "Erro ao criar a pasta");
+                        }
+                        break;
+                }
+            } catch (MessagingException ex) {
+                obj.put("erro", "Erro ao processar solicitação");
+            }
+
+            obj.writeJSONString(response.getWriter());
+            
+            return;
+        }
         
         String metodo = request.getParameter("acao");
         if (metodo == null) {

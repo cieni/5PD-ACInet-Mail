@@ -28,58 +28,22 @@
                             <% }
                         } %>
                     
-                    <aside class="col-md-3 sidebar" role="complementary" style="z-index: 0">
-                        <h3 class="ico-drawer-2">suas pastas</h3>
+                    <aside class="col-md-3 sidebar" role="complementary" style="z-index: 0; font-size: .8em">
+                        <h3 class="ico-drawer-2">suas pastas</h3> 
+                        <a href="#" id="btnAddFolder" class="btn btn-default btn-sm pull-right ico-plus"></a>
                         <hr>
                         
-                        <div class="well">
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
-                            <a href="" class="ico-folder-open btn btn-block btn-primary disabled">Pasta X</a>
-                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a>
+                        <div id="folder-treeview">
+                            <!-- <a href="" class="ico-folder-open btn btn-block btn-primary disabled">Pasta X</a>
+                            <a href="" class="ico-folder btn btn-block btn-default">Pasta 1</a> -->
+                            <p class="text-center">Carregando...</p>
                         </div>
                     </aside>
-                    <div class="col-md-9 content" role="main">
-                        <h2 class="ico-arrow-right">Pasta X</h2>
+                    <div id="folderMessages" class="col-md-9 content" role="main">
                         
-                        <form action="/servidor/salvar" method="post" class="ls-form-text">
-                            <div class="well well-sm clearfix ls-table-group-actions">
-                                <p class="d-inline-block">
-                                    <strong class="counterChecks">0</strong>
-                                    <span class="counterChecksStr">itens selecionados</span>
-                                </p>
-                                <div class="actions pull-right">
-                                    <button type="button" class="btn btn-info">Mover</button>
-                                    <button type="button" class="btn btn-danger">Excluir</button>
-                                </div>
-                            </div>
-                            <table class="table ls-table">
-                                <thead>
-                                    <tr>
-                                        <th class="txt-center" style="width: 40px"><input type="checkbox"></th>
-                                        <th class="ls-nowrap" style="width: 200px;">Remetente</th>
-                                        <th class="txt-center hidden-xs" style="width: 100px;">Recebido</th>
-                                        <th class="" colspan="2">Assunto</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td> <input name="id" value="1" type="checkbox"> </td>
-                                        <td>José Carlos</td>
-                                        <td class="txt-center">11/05/2014</td>
-                                        <td>Projeto do Webmail</td>
-                                        <td style="width: 100px; padding-right: 0; padding-left: 0;" class="txt-center">
-                                            <a style="display: inline" title="visualizar" href="#" onclick="return lerEmail(1);" class="ico-checkmark text-primary"></a>
-                                            <a style="display: inline" title="responder" href="#" onclick="return responderEmail(1);" class="ico-reply"></a>
-                                            <a style="display: inline" title="encaminhar" href="#" onclick="return encaminharEmail(1);" class="ico-forward-2"></a>
-                                            <a style="display: inline" title="excluir" href="email.jsp?acao=excluir&id=2" data-confirm-text="Confirma a exclusão deste e-mail?" class="text-danger ico-remove"><span style="display: none">Excluir</span></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </form>
-                        
+                        <div class="well">
+                            <p>Selecione uma pasta para exibição...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,10 +59,12 @@
                         <hr>
                         <p>
                             <strong>Recebido: </strong><span id="emailTime">22/05/2011 às 11:45:31</span><br>
-                            <strong>De: </strong><span id="emailFrom">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span></p>
+                            <strong>De: </strong><span id="emailFrom">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span><br>
+                            <strong>Para: </strong><span id="emailTo">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span><br>
+                            <strong>Cópia: </strong><span id="emailCC">Joãozinho &lt;<a href="mailto:joao@olar.com">joao@olar.com</a>&gt;</span></p>
                     </div>
                     <div class="modal-body">
-                        <iframe id="emailBody" style="width: 100%; height: 250px; margin: 0; border: none;" seamless="seamless" src="readme.md"></iframe>
+                        <iframe id="emailBody" style="width: 100%; height: 250px; margin: 0; border: none;" seamless="seamless" src=""></iframe>
                     </div>
                     <div class="modal-footer" style="margin-top: 0;">
                         
@@ -110,4 +76,143 @@
             </div>
         </div>
 
-<%@include file="modelo/rodapepag.jsp" %>
+        <%@include file="modelo/rodapesc.jsp" %>
+        <%@include file="modelo/scripts.jsp" %>
+        
+        <script type="text/javascript">
+        $(function() {
+            var folderMessages = $("#folderMessages");
+            var xhr = "";
+            var pastas = $("#folder-treeview");
+            var url = "";
+            var pastas_nodes = {};
+            
+            context.init({preventDoubleContext: false});
+	
+            $.getJSON("email.jsp", { acao: "pastas" }, function(dados) {
+                if (!dados.erro) {
+                    pastas_nodes = dados;
+                    pastas.treeview({
+                        nodeIcon: "",
+                        expandIcon: "ico-folder",
+                        collapseIcon: "ico-folder-open",
+                        selectedBackColor: "#aaa",
+                        data: dados,
+                        onNodeSelected: function (e, node) {
+                            folderMessages
+                                    .empty()
+                                    .append("<div class=well>Carregando pasta...</div>");
+                            
+                            if (xhr.abort)
+                                xhr.abort();
+                            
+                            xhr = $.ajax({
+                                type: "POST",
+                                url: "/email.jsp",
+                                data: {
+                                    acao: "pasta",
+                                    url: node.urlname 
+                                }
+                            });
+                            url = node.urlname;
+                            xhr.done(function(data) {
+                                folderMessages.html(data);
+                                locastyle.tables.init(folderMessages);
+                                xhr = "";
+                                
+                                var sel = $("#selectFolderMove", folderMessages);
+                                sel.empty();
+                                
+                                var nSel = $("<select class=form-control name=moveMsg/>");
+                                nSel.css('width', 'auto').css('display', 'inline-block');
+                                
+                                var geraOp = function(i, node) {
+                                    if (node.selectable) {
+                                        nSel.append($("<option value='"+node.urlname+"'>"+node.text+"</option>"));
+                                    }
+                                    if (node.nodes)
+                                        $.each(node.nodes, geraOp);
+                                    if (node._nodes)
+                                        $.each(node._nodes, geraOp);
+                                };
+                                
+                                $.each(pastas_nodes, geraOp);
+                                sel.append(nSel);
+                                
+                            });
+                        }
+                    });
+                    context.attach("#folder-treeview ul li", [
+                        { text: 'Renomear', action: function(e) {
+                                var pastaClick = $('body').data('context');
+                                
+                                if (!pastaClick.is("li")) {
+                                    pastaClick = pastaClick.parent("li");
+                                }
+                                var nomeAtu = pastaClick.clone();
+                                nomeAtu.children("span").remove();
+                                nomeAtu = nomeAtu.text();
+                                
+                                var nome = window.prompt("Informe um novo nome para a pasta:", nomeAtu);
+                                if (nome != null && nome != nomeAtu && nome != "") {
+                                    $.post("/conf/pasta", { url: url, acao: "renomear", novo: nome }, function(d) {
+                                        if (d.erro)
+                                            alert(d.erro);
+                                        else {
+                                            alert("Sucesso! Recarregando pastas...");
+                                            location.href = "/";
+                                        }
+                                    }, "json");
+                                }
+                        }},
+                        { divider: true },
+                        { text: 'Esvaziar', class: 'text-warning', action: function(e) {
+                                if (confirm('Confirma excluir todas as mensagens desta pasta?')) {
+                                    $.post("/conf/pasta", { url: url, acao: "esvaziar" }, function(d) {
+                                        if (d.erro)
+                                            alert(d.erro);
+                                        else {
+                                            alert("Sucesso! Recarregando pastas...");
+                                            location.href = "/";
+                                        }
+                                    }, "json");
+                                }
+                        }},
+                        { text: 'Excluir', class: 'text-danger', action: function(e) {
+                                if (confirm('Confirma excluir esta pasta e todas as mensagens nela contidas?')) {
+                                    $.post("/conf/pasta", { url: url, acao: "excluir" }, function(d) {
+                                        if (d.erro)
+                                            alert(d.erro);
+                                        else {
+                                            alert("Sucesso! Recarregando pastas...");
+                                            location.href = "/";
+                                        }
+                                    }, "json");
+                                }
+                        } }
+                    ]);
+                } else {
+                    pastas.children("p").remove();
+                    pastas.append("<div class='alert alert-danger'>Verifique suas configurações de IMAP.</div>");
+                }
+            });
+            
+            $("#btnAddFolder").click(function(e) {
+                var nome = prompt("Entre com o nome para a nova pasta:", "");
+                
+                if (nome != null) {
+                    $.post("/conf/pasta", { url: url, acao: "nova", novo: nome }, function(d) {
+                        if (d.erro)
+                            alert(d.erro);
+                        else {
+                            alert("Sucesso! Recarregando pastas...");
+                            location.href = "/";
+                        }
+                    }, "json");
+                }
+            });
+            
+        });
+        </script>
+    </body>
+</html>
